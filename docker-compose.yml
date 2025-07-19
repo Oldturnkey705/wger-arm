@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:16
+    container_name: wger-db
+    restart: always
+    environment:
+      POSTGRES_DB: wger
+      POSTGRES_USER: wger
+      POSTGRES_PASSWORD: wgerpass2025
+
+  wger:
+    build:
+      context: .
+    container_name: wger-app
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "34892:8000"
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=wger
+      - POSTGRES_PASSWORD=wgerpass2025
+      - POSTGRES_DB=wger
+      - DJANGO_SUPERUSER_USERNAME=mdrysdale
+      - DJANGO_SUPERUSER_PASSWORD=drysdaleadmin2025
+      - DJANGO_SUPERUSER_EMAIL=mdrysdale9663@gmail.com
+      - ALLOWED_HOSTS=wger.oldturnkey.com,localhost,127.0.0.1
+      - CSRF_TRUSTED_ORIGINS=https://wger.oldturnkey.com
+      - SECURE_PROXY_SSL_HEADER=HTTP_X_FORWARDED_PROTO,https
